@@ -1,22 +1,20 @@
 <?php
 //si c'est bien la méthode add 
-if (isset($_POST["button"]) && $_POST["button"] == "a"){
-    if(!empty($_POST["doItAnakin"])){
-        $inputRaw = array("doItAnakin" => FILTER_SANITIZE_STRING);
-        $input = filter_input_array(INPUT_POST, $inputRaw);
-        //sanatisation
-        $TEST = file_get_contents("js/test.json");
-        $testphp = json_decode($TEST, true);
-        //permet de décortiquer le json en array php
-        array_push($testphp, $input);
-        //premier argument = là ou tu met les infos
-        //deuxième = ce que tu push ici l'input de la personne 
-        $testphpJson = json_encode($testphp);
-        //recrée un json à partir du tableau
-        file_put_contents("js/test.json",$testphpJson);
-        //modifier le contenu du fichier test.json contenu dans le dossier js et cela va mettre le contenu de la vrabile $testphpJson       
+if(!empty($_POST["doItAnakin"])){
+    $inputRaw = array("doItAnakin" => FILTER_SANITIZE_STRING);
+    $input = filter_input_array(INPUT_POST, $inputRaw);
+    //sanatisation
+    $TEST = file_get_contents("js/test.json");
+    $testphp = json_decode($TEST, true);
+    //permet de décortiquer le json en array php
+    array_push($testphp, $input);
+    //premier argument = là ou tu met les infos
+    //deuxième = ce que tu push ici l'input de la personne 
+    $testphpJson = json_encode($testphp);
+    //recrée un json à partir du tableau
+    file_put_contents("js/test.json",$testphpJson);
+    //modifier le contenu du fichier test.json contenu dans le dossier js et cela va mettre le contenu de la vrabile $testphpJson       
     }
-}
 else{
     echo("<h2>Somethings wrong</h2>");
 }
@@ -38,13 +36,10 @@ else{
             <div>
                 <h3 class="CenterText">To-Do List</h3>
             </div>
-            <form action="index.php" method="POST" class="col s10 offset-s1">
-                <div class="row">
-                    <h5 class="CenterText">Test</h5>
-                </div>
+            <form action="index.php" method="POST">
                 <div class="row">
                     <div class="input-field col s8 push-s2">
-                        <textarea value="Bonsoir" class="materialize-textarea" name="doItAnakin" id="doItAnakin"></p>
+                        <textarea value="Bonsoir" class="materialize-textarea" name="doItAnakin" id="doItAnakin"></textarea>
                     </div>
                 </div>
                 <div class="row">
@@ -53,9 +48,6 @@ else{
                     </button>
                 </div>
             </form>
-            <div class="video-container">
-                <iframe width="860" height="480" src="https://www.youtube.com/watch?v=5-sfG8BV8wU" frameborder="0" allowfullscreen></iframe>
-            </div>
         </div>
     </div>
 </body>
