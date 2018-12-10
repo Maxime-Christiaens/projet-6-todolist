@@ -1,3 +1,26 @@
+<?php
+//si c'est bien la méthode add 
+if (isset($_POST["button"]) && $_POST["button"] == "a"){
+    if(!empty($_POST["doItAnakin"])){
+        $inputRaw = array("doItAnakin" => FILTER_SANITIZE_STRING);
+        $input = filter_input_array(INPUT_POST, $inputRaw);
+        //sanatisation
+        $TEST = file_get_contents("js/test.json");
+        $testphp = json_decode($TEST, true);
+        //permet de décortiquer le json en array php
+        array_push($testphp, $input);
+        //premier argument = là ou tu met les infos
+        //deuxième = ce que tu push ici l'input de la personne 
+        $testphpJson = json_encode($testphp);
+        //recrée un json à partir du tableau
+        file_put_contents("js/test.json",$testphpJson);
+        //modifier le contenu du fichier test.json contenu dans le dossier js et cela va mettre le contenu de la vrabile $testphpJson       
+    }
+}
+else{
+    echo("<h2>Somethings wrong</h2>");
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,18 +36,19 @@
     <div class="row">
         <div class="col s4 push-s4 row bg-color formuDiv">
             <div>
-                <h3 style="text-align : center">To-Do List</h3>
+                <h3 class="CenterText">To-Do List</h3>
             </div>
-            <form action="php/formu.php" method="POST" class="col s10 offset-s1">
+            <form action="index.php" method="POST" class="col s10 offset-s1">
+                <div class="row">
+                    <h5 class="CenterText">Test</h5>
+                </div>
                 <div class="row">
                     <div class="input-field col s8 push-s2">
-                        <textarea value="Bonsoir" class="materialize-textarea" name="message" id="message"><?php if(isset($_SESSION["message"])){echo($_SESSION["message"]);} ?></textarea>
-                        <label for="message">Un message à nous transmettre ?</label>
-                        <p class="redy"><?php if(isset($_SESSION["ErrorMessage"])){echo($_SESSION["ErrorMessage"]);} ?></p>
+                        <textarea value="Bonsoir" class="materialize-textarea" name="doItAnakin" id="doItAnakin"></p>
                     </div>
                 </div>
                 <div class="row">
-                    <button class="green col s4 push-s4 waves-effect waves-light btn" type="submit"> 
+                    <button class="green col s4 push-s4 waves-effect waves-light btn" name="button" value="a" type="submit"> 
                         Enregistrer
                     </button>
                 </div>
