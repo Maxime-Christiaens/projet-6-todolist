@@ -1,4 +1,5 @@
 <?php
+
 //si c'est bien la méthode add 
 if(!empty($_POST["doItAnakin"])){
     $inputRaw = array("doItAnakin" => FILTER_SANITIZE_STRING);
@@ -13,11 +14,9 @@ if(!empty($_POST["doItAnakin"])){
     $testphpJson = json_encode($testphp);
     //recrée un json à partir du tableau
     file_put_contents("js/test.json",$testphpJson);
-    //modifier le contenu du fichier test.json contenu dans le dossier js et cela va mettre le contenu de la vrabile $testphpJson       
-    }
-else{
-    echo("<h2>Somethings wrong</h2>");
-}
+    //modifier le contenu du fichier test.json contenu dans le dossier js et cela va mettre le contenu de la variable $testphpJson       
+}   
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -50,7 +49,26 @@ else{
             </form>
         </div>
     </div>
+    <div class="row">
+        <h4 id="demo">Liste</h4>
+        <button type="button" onclick="loadDoc()">Change Content</button>
+    </div>
 </body>
+
+<script>
+function loadDoc() {
+    let xhttp = new XMLHttpRequest();
+    //crée une variable requête
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) { //condition vérifiant si connexion est établi
+        document.getElementById("demo").innerHTML = this.responseText;
+    }
+};
+    xhttp.open("GET", "js/test.json", true);
+    xhttp.send();
+}
+</script>
+
 <!-- JQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- Materialize JavaScript -->
