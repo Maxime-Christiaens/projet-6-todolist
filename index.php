@@ -2,13 +2,14 @@
 
 //si c'est bien la méthode add 
 if(!empty($_POST["doItAnakin"])){
-    $inputRaw = array("doItAnakin" => FILTER_SANITIZE_STRING);
-    $input = filter_input_array(INPUT_POST, $inputRaw);
+    $input = trim(filter_input(INPUT_POST, "doItAnakin", FILTER_SANITIZE_STRING));
     //sanatisation
     $TEST = file_get_contents("js/test.json");
     $testphp = json_decode($TEST, true);
     //permet de décortiquer le json en array php
-    array_push($testphp, $input);
+    $inputToDo = [ "ToDo" => $input, "status" => true];
+    //méga-important ; crée un tableau avec 2 clé et 2 value
+    array_push($testphp, $inputToDo);
     //premier argument = là ou tu met les infos
     //deuxième = ce que tu push ici l'input de la personne 
     $testphpJson = json_encode($testphp);
@@ -17,7 +18,13 @@ if(!empty($_POST["doItAnakin"])){
     //modifier le contenu du fichier test.json contenu dans le dossier js et cela va mettre le contenu de la variable $testphpJson       
 }   
 
+if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du button est tjs bien fixé à "a"
+    $empty = '{}';
+    file_put_contents("js/test.json",$empty);
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -31,11 +38,26 @@ if(!empty($_POST["doItAnakin"])){
 </head>
 <body>
     <div class="row">
-        <div class="col s4 push-s4 row bg-color formuDiv">
+        <div class="col s6 push-s3 row bg-color formuDiv">
             <div>
                 <h3 class="CenterText">To-Do List</h3>
             </div>
-            <form action="index.php" method="POST">
+            <div class="row">
+                <h4 id="demo"></h4>
+            </div>
+            <div class="row CenterText">
+                <?php
+                if(!empty($testphp)){
+                    foreach ($testphp as $value){
+                        echo("<h5>"."tâche = ".$value["ToDo"]."</h5>"); 
+                    }
+                }
+                else{
+                    echo("<h5>Aucune tâche</h5>");
+                }
+                ?>
+            </div>
+            <form method="POST">
                 <div class="row">
                     <div class="input-field col s8 push-s2">
                         <textarea value="Bonsoir" class="materialize-textarea" name="doItAnakin" id="doItAnakin"></textarea>
@@ -46,27 +68,31 @@ if(!empty($_POST["doItAnakin"])){
                         Enregistrer
                     </button>
                 </div>
+                <div class="row">
+                    <button class="red col s4 push-s4    waves-effect waves-light btn" name="buttonReset" value="a" type="submit"> 
+                        Supprimer
+                    </button>
+                </div>
             </form>
         </div>
-    </div>
-    <div class="row">
-        <h4 id="demo">Liste</h4>
-        <button type="button" onclick="loadDoc()">Change Content</button>
     </div>
 </body>
 
 <script>
-function loadDoc() {
+function DoIt() {
     let xhttp = new XMLHttpRequest();
     //crée une variable requête
     xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) { //condition vérifiant si connexion est établi
         document.getElementById("demo").innerHTML = this.responseText;
+        let jsonTest = this.responseText;
+        console.log(jsonTest[0]);
     }
 };
     xhttp.open("GET", "js/test.json", true);
     xhttp.send();
 }
+//DoIt();
 </script>
 
 <!-- JQuery -->
