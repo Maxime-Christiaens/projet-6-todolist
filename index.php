@@ -2,7 +2,8 @@
 
 //si c'est bien la méthode add 
 if(!empty($_POST["doItAnakin"])){
-    $input = trim(filter_input(INPUT_POST, "doItAnakin", FILTER_SANITIZE_STRING));
+    $inputRaw = $_POST["doItAnakin"];
+    $input = trim(filter_var($inputRaw, FILTER_SANITIZE_STRING));
     //sanatisation
     $TEST = file_get_contents("js/test.json");
     $testphp = json_decode($TEST, true);
@@ -49,7 +50,8 @@ if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du butto
                 <?php
                 if(!empty($testphp)){
                     foreach ($testphp as $value){
-                        echo("<h5>"."tâche = ".$value["ToDo"]."</h5>"); 
+                        echo("<h5>"."tâche = ".$value["ToDo"]."</h5>");
+                        echo("<p><label><input name=".$value["ToDo"]." type='checkbox'/><span>Terminé".$value["ToDo"]."</span></label></p>");   
                     }
                 }
                 else{
