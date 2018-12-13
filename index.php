@@ -20,9 +20,14 @@ if(!empty($_POST["doItAnakin"])){
         //SWITCH ETAT//
         ///////////////
             foreach($_POST["yolo"] as $value){
-                echo($value["ToDo"]);
+                echo("value = ".$value);
+                echo(" test = ".$testphp[0]["ID"]."<br>");
+                for ($k=0 ; $k<count($testphp); $k++){
+                    if ($value == $testphp[$k]["ID"]){
+                        $testphp[$k]["status"] = "fini";
+                    }
+                }
             }
-
 
         $phpArray = $testphp; 
 
@@ -68,7 +73,7 @@ if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du butto
                     <h5>tâche = <?php echo($value['ToDo']); echo(" ID = ".$value['ID']); ?> </h5>
                     <p>
                         <label>
-                            <input name="yolo" value=<?php echo($i); $i++; ?> type="checkbox"/>
+                            <input name="yolo[]" value=<?php echo($i); $i++; ?> type="checkbox"/>
                             <span></span>
                         </label>
                     </p>
@@ -95,7 +100,7 @@ if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du butto
             <h4 class="CenterText">Historique</h4>
             <?php foreach ($testphp as $value) : ?> <!--Boucle sur tout le tableau contenant les données-->
                 <?php if ($value['status'] == "fini"): ?> <!--Si le statue de l'objectif est à true l'affiche-->
-                    <h5>tâche = <?php echo($value['ToDo']) ?> </h5>
+                    <h5 class="CenterText">tâche = <?php echo($value['ToDo']) ?> </h5>
                 <?php endif; ?>
             <?php  endforeach; ?>
         </div>
