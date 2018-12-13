@@ -8,8 +8,9 @@ if(!empty($_POST["doItAnakin"])){
     if(!empty($input)){ // si l'input n'est pas nul l'intégrer
         $TEST = file_get_contents("js/test.json");
         $testphp = json_decode($TEST, true);
+        echo(count($testphp)); //////////////////////////DEBUG//////////////////////////
         //permet de décortiquer le json en array php
-        $inputToDo = ["ToDo" => $input, "status" => true];
+        $inputToDo = ["ID" => count($testphp), "ToDo" => $input, "status" => true];
         //méga-important ; crée un tableau avec 2 clé et 2 value
         array_push($testphp, $inputToDo);
         //premier argument = là ou tu met les infos
@@ -48,18 +49,29 @@ if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du butto
             <div class="row">
                 <h4 id="demo"></h4>
             </div>
-            <div class="row">
-                    <?php foreach ($testphp as $value) : ?> 
-                    <p class= "col s3">
+            <form method="POST">
+            <div class="row CenterText">
+                <?php $i = 0;//setup du compteur i ?>
+                <?php foreach ($testphp as $value) : ?> <!--Boucle sur tout le tableau contenant les données-->
+                    <?php if ($value['status'] == true): ?> <!--Si le statue de l'objectif est à true l'affiche-->
+                    <h5>tâche = <?php echo($value['ToDo']); echo(" ID = ".$value['ID']) ?> </h5>
+                    <p>
                         <label>
-                            <input type="checkbox"/>
+                            <input name=<?php echo($i)?> value="yolo" type="checkbox"/>
                             <span></span>
+                            <?php 
+                                echo("status = ".$value["status"]); 
+                                if (isset($_POST[$i]) && $value["ID"] == $i) { 
+                                    echo($value["status"]); 
+                                    $value["status"] = false;
+                                } 
+                                $i++;
+                            ?>
                         </label>
                     </p>
-                    <h5 class="col s6">tâche = <?php echo($value['ToDo']) ?> </h5>
-                    <?php  endforeach; ?>
+                    <?php endif; ?>
+                <?php  endforeach; ?>
             </div>
-            <form method="POST">
                 <div class="row">
                     <div class="input-field col s8 push-s2">
                         <textarea value="Bonsoir" class="materialize-textarea" name="doItAnakin" id="doItAnakin"></textarea>
@@ -76,6 +88,13 @@ if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du butto
                     </button>
                 </div>
             </form>
+        <div>
+            <?php foreach ($testphp as $value) : ?> <!--Boucle sur tout le tableau contenant les données-->
+                <?php if ($value['status'] == false): ?> <!--Si le statue de l'objectif est à true l'affiche-->
+                    <h5>tâche = <?php echo($value['ToDo']) ?> </h5>
+                <?php endif; ?>
+            <?php  endforeach; ?>
+        </div>
         </div>
     </div>
 </body>
