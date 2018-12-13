@@ -1,11 +1,11 @@
 <?php
 
 //si c'est bien la méthode add 
-if(!empty($_POST["doItAnakin"])){
     $inputRaw = $_POST["doItAnakin"];
     $input = trim(filter_var($inputRaw, FILTER_SANITIZE_STRING));
     //sanatisation
-    if(!empty($input)){ // si l'input n'est pas nul l'intégrer
+
+        //si l'input n'est pas nul l'intégrer
         $TEST = file_get_contents("js/test.json");
         $testphp = json_decode($TEST, true);
         echo(count($testphp)); //////////////////////////DEBUG//////////////////////////
@@ -20,9 +20,10 @@ if(!empty($_POST["doItAnakin"])){
         //SWITCH ETAT//
         ///////////////
             foreach($_POST["yolo"] as $value){
-                echo("value = ".$value);
-                echo(" test = ".$testphp[0]["ID"]."<br>");
+                echo("value = $value");
                 for ($k=0 ; $k<count($testphp); $k++){
+                    //echo("value = ".$value);
+                    //echo(" test = ".$testphp[0]["ID"]."<br>");
                     if ($value == $testphp[$k]["ID"]){
                         $testphp[$k]["status"] = "fini";
                     }
@@ -35,8 +36,7 @@ if(!empty($_POST["doItAnakin"])){
         //recrée un json à partir du tableau
         file_put_contents("js/test.json",$testphpJson);
         //modifier le contenu du fichier test.json contenu dans le dossier js et cela va mettre le contenu de la variable $testphpJson 
-    }    
-}   
+    
 
 if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du button est tjs bien fixé à "a"
     $empty = '{}';
@@ -73,11 +73,12 @@ if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du butto
                     <h5>tâche = <?php echo($value['ToDo']); echo(" ID = ".$value['ID']); ?> </h5>
                     <p>
                         <label>
-                            <input name="yolo[]" value=<?php echo($i); $i++; ?> type="checkbox"/>
+                            <input name="yolo[]" value=<?php echo($i); ?> type="checkbox"/>
                             <span></span>
                         </label>
                     </p>
                     <?php endif; ?>
+                    <?php $i++; ?>
                 <?php  endforeach; ?>
             </div>
                 <div class="row">
