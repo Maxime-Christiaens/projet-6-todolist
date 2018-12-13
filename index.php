@@ -5,18 +5,20 @@ if(!empty($_POST["doItAnakin"])){
     $inputRaw = $_POST["doItAnakin"];
     $input = trim(filter_var($inputRaw, FILTER_SANITIZE_STRING));
     //sanatisation
-    $TEST = file_get_contents("js/test.json");
-    $testphp = json_decode($TEST, true);
-    //permet de décortiquer le json en array php
-    $inputToDo = [ "ToDo" => $input, "status" => true];
-    //méga-important ; crée un tableau avec 2 clé et 2 value
-    array_push($testphp, $inputToDo);
-    //premier argument = là ou tu met les infos
-    //deuxième = ce que tu push ici l'input de la personne 
-    $testphpJson = json_encode($testphp);
-    //recrée un json à partir du tableau
-    file_put_contents("js/test.json",$testphpJson);
-    //modifier le contenu du fichier test.json contenu dans le dossier js et cela va mettre le contenu de la variable $testphpJson       
+    if(!empty($input)){ // si l'input n'est pas nul l'intégrer
+        $TEST = file_get_contents("js/test.json");
+        $testphp = json_decode($TEST, true);
+        //permet de décortiquer le json en array php
+        $inputToDo = ["ToDo" => $input, "status" => true];
+        //méga-important ; crée un tableau avec 2 clé et 2 value
+        array_push($testphp, $inputToDo);
+        //premier argument = là ou tu met les infos
+        //deuxième = ce que tu push ici l'input de la personne 
+        $testphpJson = json_encode($testphp);
+        //recrée un json à partir du tableau
+        file_put_contents("js/test.json",$testphpJson);
+        //modifier le contenu du fichier test.json contenu dans le dossier js et cela va mettre le contenu de la variable $testphpJson 
+    }    
 }   
 
 if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du button est tjs bien fixé à "a"
@@ -46,18 +48,16 @@ if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du butto
             <div class="row">
                 <h4 id="demo"></h4>
             </div>
-            <div class="row CenterText">
-                <?php
-                if(!empty($testphp)){
-                    foreach ($testphp as $value){
-                        echo("<h5>"."tâche = ".$value["ToDo"]."</h5>");
-                        echo("<p><label><input name=".$value["ToDo"]." type='checkbox'/><span>Terminé".$value["ToDo"]."</span></label></p>");   
-                    }
-                }
-                else{
-                    echo("<h5>Aucune tâche</h5>");
-                }
-                ?>
+            <div class="row">
+                    <?php foreach ($testphp as $value) : ?> 
+                    <p class= "col s3">
+                        <label>
+                            <input type="checkbox"/>
+                            <span></span>
+                        </label>
+                    </p>
+                    <h5 class="col s6">tâche = <?php echo($value['ToDo']) ?> </h5>
+                    <?php  endforeach; ?>
             </div>
             <form method="POST">
                 <div class="row">
