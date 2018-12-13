@@ -1,10 +1,10 @@
 <?php
 
 //si c'est bien la méthode add 
+if(!empty($_POST["doItAnakin"])){
     $inputRaw = $_POST["doItAnakin"];
     $input = trim(filter_var($inputRaw, FILTER_SANITIZE_STRING));
     //sanatisation
-
         //si l'input n'est pas nul l'intégrer
         $TEST = file_get_contents("js/test.json");
         $testphp = json_decode($TEST, true);
@@ -15,7 +15,6 @@
         array_push($testphp, $inputToDo);
         //premier argument = là ou tu met les infos
         //deuxième = ce que tu push ici l'input de la personne 
-
         ///////////////
         //SWITCH ETAT//
         ///////////////
@@ -29,14 +28,32 @@
                     }
                 }
             }
-
         $phpArray = $testphp; 
-
         $testphpJson = json_encode($phpArray, JSON_FORCE_OBJECT);
         //recrée un json à partir du tableau
         file_put_contents("js/test.json",$testphpJson);
         //modifier le contenu du fichier test.json contenu dans le dossier js et cela va mettre le contenu de la variable $testphpJson 
-    
+}
+else{
+    $TEST = file_get_contents("js/test.json");
+    $testphp = json_decode($TEST, true);
+    ///////////////
+    //SWITCH ETAT//
+    ///////////////
+        foreach($_POST["yolo"] as $value){
+            echo("value = $value");
+            for ($k=0 ; $k<count($testphp); $k++){
+                //echo("value = ".$value);
+                //echo(" test = ".$testphp[0]["ID"]."<br>");
+                if ($value == $testphp[$k]["ID"]){
+                    $testphp[$k]["status"] = "fini";
+                }
+            }
+        }
+    $phpArray = $testphp; 
+    $testphpJson = json_encode($phpArray, JSON_FORCE_OBJECT);
+    file_put_contents("js/test.json",$testphpJson); 
+}     
 
 if(($_POST["buttonReset"] == "a")){ //vérifie que la valeur arbitraire du button est tjs bien fixé à "a"
     $empty = '{}';
